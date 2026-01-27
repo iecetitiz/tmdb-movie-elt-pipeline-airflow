@@ -56,3 +56,12 @@ The pipeline consists of three main stages:
 │   └── transform_delta.py     # Spark script for Bronze -> Silver transformation
 ├── .env                       # Environment variables (MinIO credentials)
 └── README.md                  # Project documentation
+
+
+Table Name,Description,Key Columns
+movies,Core movie details,"movie_id, budget, revenue, vote_average"
+cast,Exploded actor details,"movie_id, character, name, cast_id"
+crew,Exploded crew details,"movie_id, name, department, job"
+genre,Parsed movie genres,"movie_id, id, name"
+production_companies,Production company info,"movie_id, id, name"
+production_countries,Production country info,"movie_id, iso_3166_1, name"
