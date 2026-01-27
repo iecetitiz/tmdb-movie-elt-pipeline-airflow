@@ -9,6 +9,20 @@
 
 This project is an end-to-end (E2E) data engineering pipeline built using the **TMDB (The Movie Database)** dataset. It automates the extraction of raw data from GitHub, ingestion into a Data Lake (**MinIO**) in Parquet format, and transformation into **Delta Lake** tables using **Apache Spark**. The entire workflow is orchestrated by **Apache Airflow** running on Docker containers.
 
+## 📖 Project Overview
+
+This project implements a scalable **Data Lakehouse** architecture to process TMDB movie data. It automates the end-to-end data lifecycle, transforming raw CSV files hosted on GitHub into optimized **Delta Lake** tables stored in **MinIO**.
+
+The pipeline is designed to simulate a real-world production environment, featuring:
+* **Ingestion:** Efficient fetching and chunking of raw data into a Bronze Layer (Parquet).
+* **Transformation:** Complex schema parsing, normalization, and cleaning using Apache Spark to create a Silver Layer (Delta).
+* **Orchestration:** Fully automated workflow management using Apache Airflow.
+
+### 🏗️ Pipeline Architecture
+
+![Architecture Flowchart](./images/pipeline_flowchart.png)
+*(Please replace the path above with your actual image file)*
+
 ## 🏗️ Architecture & Workflow
 
 The pipeline consists of three main stages:
