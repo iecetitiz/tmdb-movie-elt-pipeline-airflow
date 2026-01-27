@@ -20,7 +20,8 @@ The pipeline is designed to simulate a real-world production environment, featur
 
 ### 🏗️ Pipeline Architecture
 
-![Architecture Flowchart](https://github.com/user-attachments/assets/519b7992-c01f-4e18-8b91-b93fa1a13940)
+![Architecture Flowchart](https://github.com/user-attachments/assets/2bb4b52b-cd0f-4f59-8f1c-9351bbb7f2a3)
+
 
 ## 🏗️ Architecture & Workflow
 
