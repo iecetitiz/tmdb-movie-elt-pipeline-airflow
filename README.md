@@ -1,4 +1,4 @@
-# 🎬 TMDB Movie Data ETL Pipeline
+# 🎬 TMDB Movie Data ELT Pipeline
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python)
 ![Apache Airflow](https://img.shields.io/badge/Apache%20Airflow-2.8-017CEE?logo=apache-airflow)
