@@ -81,11 +81,10 @@ The ETL process normalizes semi-structured JSON arrays into relational tables to
 
 ## ⚙️ Build & Run
 
-You can spin up the entire infrastructure (Airflow, Spark, MinIO) with a single command sequence.
+You can spin up the entire infrastructure.
 
 ```bash
 # 1. Create a minimal .env file with custom credentials
-# Note: These credentials will be used to log in to the MinIO Console.
 echo -e "AIRFLOW_UID=50000\nMINIO_ACCESS_KEY=minio_access_key\nMINIO_SECRET_KEY=minio_secret_key" > .env
 
 # 2. Build and start the containers
