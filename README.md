@@ -9,7 +9,7 @@
 
 This project is an end-to-end (E2E) data engineering pipeline built using the **TMDB (The Movie Database)** dataset. It automates the extraction of raw data from GitHub, ingestion into a Data Lake (**MinIO**) in Parquet format, and transformation into **Delta Lake** tables using **Apache Spark**. The entire workflow is orchestrated by **Apache Airflow** running on Docker containers.
 
-## 📖 Project Overview
+## 🚀 Project Overview
 
 This project implements a scalable **Data Lakehouse** architecture to process TMDB movie data. It automates the end-to-end data lifecycle, transforming raw CSV files hosted on GitHub into optimized **Delta Lake** tables stored in **MinIO**.
 
@@ -67,19 +67,19 @@ The pipeline transforms the raw `tmdb_5000_movies` and `tmdb_5000_credits` datas
 
 The ETL process normalizes semi-structured JSON arrays into relational tables to enable efficient querying:
 
-| Table Name | Description | Source File & Column |
+| Table Name | Description | Source Column |
 | :--- | :--- | :--- |
-| **movies** | Core movie attributes (budget, revenue, runtime, etc.) | `tmdb_5000_movies.csv` (Main Columns) |
-| **crew** | Exploded crew members with department and job roles | `tmdb_5000_credits.csv` -> `crew` (JSON) |
-| **cast** | Exploded cast members with character names | `tmdb_5000_credits.csv` -> `cast` (JSON) |
-| **genre** | Movie genres mapping (One-to-Many) | `tmdb_5000_movies.csv` -> `genres` (JSON) |
-| **keywords** | Plot keywords mapping | `tmdb_5000_movies.csv` -> `keywords` (JSON) |
-| **production_companies** | Production companies involved | `tmdb_5000_movies.csv` -> `production_companies` |
-| **production_countries** | Countries where the movie was produced | `tmdb_5000_movies.csv` -> `production_countries` |
-| **spoken_languages** | Languages spoken in the movie | `tmdb_5000_movies.csv` -> `spoken_languages` |
+| **movies** | Core movie attributes (budget, revenue, runtime, etc.) | `tmdb_5000_movies.csv` |
+| **crew** | Exploded crew members with department and job roles | `credits.crew` (JSON) |
+| **cast** | Exploded cast members with character names | `credits.cast` (JSON) |
+| **genre** | Movie genres mapping (One-to-Many) | `movies.genres` (JSON) |
+| **keywords** | Plot keywords mapping | `movies.keywords` (JSON) |
+| **production_companies** | Production companies involved | `movies.production_companies` (JSON) |
+| **production_countries** | Countries where the movie was produced | `movies.production_countries` (JSON) |
+| **spoken_languages** | Languages spoken in the movie | `movies.spoken_languages` (JSON) |
 
 
-## 🚀 Build & Run
+## ⚙️ Build & Run
 
 You can spin up the entire infrastructure (Airflow, Spark, MinIO) with a single command sequence.
 
