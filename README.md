@@ -28,7 +28,7 @@ The pipeline processes the **TMDB 5000 Movie Dataset**. You can browse the sourc
 
 👉 **[View Dataset Folder](https://github.com/harshitcodes/tmdb_movie_data_analysis/tree/master/tmdb-5000-movie-dataset)**
 
-The ETL process is configured to fetch data automatically from these specific raw files:
+The ELT process is configured to fetch data automatically from these specific raw files:
 
 ### 1. Movies Dataset
 * **Source:** [`tmdb_5000_movies.csv`](https://raw.githubusercontent.com/harshitcodes/tmdb_movie_data_analysis/refs/heads/master/tmdb-5000-movie-dataset/tmdb_5000_movies.csv)
@@ -65,7 +65,7 @@ The pipeline consists of three main stages:
 
 The pipeline transforms the raw `tmdb_5000_movies` and `tmdb_5000_credits` datasets into the following **Delta Tables** in the Silver Layer.
 
-The ETL process normalizes semi-structured JSON arrays into relational tables to enable efficient querying:
+The ELT process normalizes semi-structured JSON arrays into relational tables to enable efficient querying:
 
 | Table Name | Description | Source Column |
 | :--- | :--- | :--- |
