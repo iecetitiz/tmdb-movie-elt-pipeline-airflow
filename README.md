@@ -22,7 +22,23 @@ The pipeline is designed to simulate a real-world production environment, featur
 
 ![Architecture Flowchart](https://github.com/user-attachments/assets/2bb4b52b-cd0f-4f59-8f1c-9351bbb7f2a3)
 
+## 📂 Dataset Information
 
+The pipeline processes the **TMDB 5000 Movie Dataset**. You can browse the source folder containing the datasets directly on GitHub:
+
+👉 **[View Dataset Folder on GitHub](https://github.com/harshitcodes/tmdb_movie_data_analysis/tree/master/tmdb-5000-movie-dataset)**
+
+The ETL process is configured to fetch data automatically from these specific raw files:
+
+### 1. Movies Dataset
+* **Source:** [`tmdb_5000_movies.csv`](https://raw.githubusercontent.com/harshitcodes/tmdb_movie_data_analysis/refs/heads/master/tmdb-5000-movie-dataset/tmdb_5000_movies.csv)
+* **Content:** Metadata for ~5,000 movies including `budget`, `revenue`, `title`, `runtime`, and semi-structured JSON columns like `genres` and `production_companies`.
+
+### 2. Credits Dataset
+* **Source:** [`tmdb_5000_credits.csv`](https://raw.githubusercontent.com/harshitcodes/tmdb_movie_data_analysis/refs/heads/master/tmdb-5000-movie-dataset/tmdb_5000_credits.csv)
+* **Content:** Cast and crew information linked by `movie_id`, containing heavy JSON arrays for `cast` and `crew`.
+
+> **Note:** The pipeline downloads these files directly into the **Bronze Layer (MinIO)** using the `data_ingestion.py` script.
 ## 🏗️ Architecture & Workflow
 
 The pipeline consists of three main stages:
@@ -45,23 +61,48 @@ The pipeline consists of three main stages:
 * **Language:** Python
 * **Libraries:** `boto3`, `pandas`, `pyspark`, `delta-spark`
 
-## 📂 Project Structure
+## 📊 Data Modeling
+
+The pipeline transforms the raw `tmdb_5000_movies` and `tmdb_5000_credits` datasets into the following **Delta Tables** in the Silver Layer.
+
+The ETL process normalizes semi-structured JSON arrays into relational tables to enable efficient querying:
+
+| Table Name | Description | Source Column |
+| :--- | :--- | :--- |
+| **movies** | Core movie attributes (budget, revenue, runtime, etc.) | `tmdb_5000_movies.csv` |
+| **crew** | Exploded crew members with department and job roles | `credits.crew` (JSON) |
+| **cast** | Exploded cast members with character names | `credits.cast` (JSON) |
+| **genre** | Movie genres mapping (One-to-Many) | `movies.genres` (JSON) |
+| **keywords** | Plot keywords mapping | `movies.keywords` (JSON) |
+| **production_companies** | Production companies involved | `movies.production_companies` (JSON) |
+| **production_countries** | Countries where the movie was produced | `movies.production_countries` (JSON) |
+| **spoken_languages** | Languages spoken in the movie | `movies.spoken_languages` (JSON) |
+
+## 🔄 Airflow Workflow
+
+The pipeline is orchestrated by the DAG `tmdb_etl_pipeline`, which manages the dependency chain between data ingestion and Spark transformations.
+
+### DAG Architecture
+The workflow utilizes **SSHOperators** to execute heavy processing tasks on a dedicated remote Spark container. This ensures that the Airflow worker remains lightweight and only handles orchestration logic.
+
+```mermaid
+graph LR
+    Start((Start)) --> T1[movies_ingestion]
+    T1 --> T2[credits_ingestion]
+    T2 --> T3[transform_data]
+    T3 --> End((End))
+
+    style T1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style T2 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style T3 fill:#fff3e0,stroke:#ff6f00,stroke-width:2px
+
+## 🚀 Build & Run
+
+You can spin up the entire infrastructure (Airflow, Spark, MinIO) with a single command sequence.
 
 ```bash
-.
-├── dags/
-│   └── tmdb_etl_dag.py        # Airflow DAG file (using SSHOperator)
-├── scripts/
-│   ├── data_ingestion.py      # Script for fetching data from GitHub to MinIO
-│   └── transform_delta.py     # Spark script for Bronze -> Silver transformation
-├── .env                       # Environment variables (MinIO credentials)
-└── README.md                  # Project documentation
+# 1. Create a minimal .env file (Required for Airflow & MinIO)
+echo -e "AIRFLOW_UID=50000\nMINIO_ACCESS_KEY=minioacesskey\nMINIO_SECRET_KEY=miniosecretkey" > .env
 
-
-Table Name,Description,Key Columns
-movies,Core movie details,"movie_id, budget, revenue, vote_average"
-cast,Exploded actor details,"movie_id, character, name, cast_id"
-crew,Exploded crew details,"movie_id, name, department, job"
-genre,Parsed movie genres,"movie_id, id, name"
-production_companies,Production company info,"movie_id, id, name"
-production_countries,Production country info,"movie_id, iso_3166_1, name"
+# 2. Build and start the containers
+docker-compose up -d
